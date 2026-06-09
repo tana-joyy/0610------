@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預約您的撞球體驗 - Cue Control</title>
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/booking.css">
+</head>
+
+<body>
+
+    <header class="header header-internal">
+        <div class="container">
+            <div class="left">
+                <a href="index.html" class="logo">Cue Control</a>
+            </div>
+            <div class="center">
+                <div class="dropdown">
+                    <a href="" class="mid-btn nav-btn">什麼是撞球？ ▾</a>
+                    <div class="dropdown-content">
+                        <a href="billiards.html">撞球知識指南</a>
+                        <a href="">新手教學</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a href="" class="mid-btn nav-btn">訓練課程 ▾</a>
+                    <div class="dropdown-content">
+                        <a href="">預約課程</a>
+                        <a href="">課程方案</a>
+                    </div>
+                </div>
+                <a href="" class="mid-btn nav-btn">最新消息</a>
+                <div class="dropdown">
+                    <a href="" class="mid-btn nav-btn">關於我們 ▾</a>
+                    <div class="dropdown-content">
+                        <a href="about.html">品牌與場館</a>
+                        <a href="menu.html">球檯價目及菜單</a>
+                        <a href="coaches.html">專業師資團隊</a>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <a href="login.html" class="mid-btn nav-btn">會員登入</a>
+                <a href="booking.html" class="cta-btn mid-btn nav-btn">立即預約</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="booking-section">
+            <form class="container">
+                <div class="section-title">
+                    <h1 class="sevices-title text-title-large">預約您的撞球體驗</h1>
+                    <p class="text-muted eng-title">智慧型線上選桌系統。全館配置專業競賽球檯與高解析無影照明，只需完成以下三個簡單步驟，即可精準預定您的專屬熱血時段。</p>
+                </div>
+                <div class="progress-bar">
+                    <ol class="stepper">
+                        <li class="step-item active">
+                            <span class="step-number">1</span>
+                            <span class="current-step text-muted">選擇場館及時段</span>
+                        </li>
+
+                        <li class="step-item">
+                            <span class="step-number">2</span>
+                            <span class="step-text text-muted">挑選球檯</span>
+                        </li>
+                        <li class="step-item">
+                            <span class="step-number">3</span>
+                            <span class="step-text text-muted">加購餐飲</span>
+                        </li>
+
+                        <li class="step-item">
+                            <span class="step-number">4</span>
+                            <span class="step-text text-muted">確認付款</span>
+                        </li>
+                    </ol>
+                </div>
+                <!-- -----------------------步驟1-------------------------- -->
+                <div class="card" id="booking-step-1">
+                    <div class="row-top">
+                        <h2 class="text-title-medium step-title" id="step-title-1">1. 選擇場館及時段</h2>
+                    </div>
+                    <div class="row-center">
+                        <div class="col-left">
+                            <div class="choose-date topic">
+                                <p class="booking-title text-muted">選擇日期</p>
+                                <!-- 要用js寫日歷 -->
+                                <div class="calender content">
+                                    <link rel="stylesheet"
+                                        href="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/style.min.css" />
+                                    <link rel="stylesheet"
+                                        href="https://fonts.googleapis.com/css?family=Material+Icons" />
+                                    <script src="https://cdn.jsdelivr.net/npm/lemonadejs/dist/lemonade.min.js"></script>
+                                    <script
+                                        src="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/index.min.js"></script>
+
+                                    <div id='root'></div>
+
+                                    <script>
+                                        const { Calendar } = calendarjs;
+
+                                        Calendar(document.getElementById('root'), {
+                                            type: 'inline',
+                                            value: new Date(),
+                                            footer: false
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-right">
+                            <div class="booking-notice">
+                                <strong class="notice-title"> 預約提示</strong>
+                                <ul class="notice-list">
+                                    <li>系統開放預約 1 小時後至 30 天內之球檯。</li>
+                                    <li>單次預約基本時數最低 2 小時，最高上限 6 小時。</li>
+                                </ul>
+                            </div>
+                            <div class="choose-store topic">
+                                <p class="booking-title  text-muted">選擇場館</p>
+                                <div class="store-options content">
+                                    <input type="radio" id="Hsinchu" value="Hsinchu" name="store">
+                                    <label for="Hsinchu" class="store-btn">新竹旗艦館</label>
+                                    <input type="radio" id="Taoyuan" value="Taoyuan" name="store">
+                                    <label for="Taoyuan" class="store-btn">桃園概念館</label>
+                                </div>
+                            </div>
+                            <div class="choose-time topic">
+                                <div class="col">
+                                    <p class="booking-title text-muted">起始時間</p>
+                                    <!-- 這邊之後可以用js動態生成 options -->
+                                    <select name="start_time" id="" class="select-time time-input content">
+                                        <option value="17:00">下午 5:00</option>
+                                        <option value="17:15">下午 5:15</option>
+                                        <option value="17:30">下午 5:30</option>
+                                        <option value="17:45">下午 5:45</option>
+                                        <option value="18:00">下午 6:00</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <p class="booking-title text-muted">預約時數</p>
+                                    <div class="hours time-input content">
+                                        <input type="radio" id="hr-2" value="2" name="hour">
+                                        <label for="hr-2" class="hour-btn">2</label>
+                                        <input type="radio" id="hr-3" value="3" name="hour">
+                                        <label for="hr-3" class="hour-btn">3</label>
+                                        <input type="radio" id="hr-4" value="4" name="hour">
+                                        <label for="hr-4" class="hour-btn">4</label>
+                                        <input type="radio" id="hr-5" value="5" name="hour">
+                                        <label for="hr-5" class="hour-btn">5</label>
+                                        <input type="radio" id="hr-6" value="6" name="hour">
+                                        <label for="hr-6" class="hour-btn">6</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="confirm-area topic">
+                                <p class="booking-title text-muted">預約摘要</p>
+                                <div class="sum-details">
+                                    <ul class="choose-result-list">
+                                        <li>場館：<span class="summary-store chosen-result" id="">新竹旗艦館</span></li>
+                                        <li>日期：<span class="summary-date chosen-result" id="">2026 年 06 月 15 日
+                                                (星期一)</span> </li>
+                                        <li>時段：<span class="summary-time chosen-result" id="">19:00 – 21:00 (共 2
+                                                小時)</span> </li>
+                                    </ul>
+
+                                </div>
+
+                            </div>
+                            <button class="next-step cta-btn topic">下一步，挑選球檯</button>
+                        </div>
+                    </div>
+                    <div class="row-bottom">
+                        <p class="line"></p>
+                        <div class="accordion" id="accordion">
+                            <p class="notice-title">價目表及預約須知</p>
+                            <p class="notice-title"> ▾ </p>
+                        </div>
+                        <div class="notice topic hidden" id="notice">
+                            <div class="price-list topic">
+                                <p class="rule-title ">價目表</p>
+                                <table class="price-table content">
+                                    <tr>
+                                        <th>預約時數</th>
+                                        <th>球檯總價</th>
+                                        <th>訂金<br>
+                                            (50元/時)</th>
+                                        <th>尾款</th>
+                                    </tr>
+                                    <tr>
+                                        <td>2小時</td>
+                                        <td>400</td>
+                                        <td>100</td>
+                                        <td>300</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3小時</td>
+                                        <td>600</td>
+                                        <td>150</td>
+                                        <td>450</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4小時</td>
+                                        <td>800</td>
+                                        <td>200</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5小時</td>
+                                        <td>1000</td>
+                                        <td>250</td>
+                                        <td>750</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6小時</td>
+                                        <td>1200</td>
+                                        <td>300</td>
+                                        <td>900</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="rules">
+                                <p class="rule-title ">預約規範</p>
+                                <ol class="content">
+                                    <li>本系統線上僅預收訂金，球檯總價之剩餘尾款將於當日現場報到時結清。</li>
+                                    <li>凡預約 24 小時內之時段，訂單成立後即不可取消、改期或退還訂金。</li>
+                                    <li>最遲請於預約時間 10 分鐘前抵達櫃檯結清尾款。</li>
+                                    <li>遲到超過 10 分鐘，系統將自動取消該筆訂位並釋出球檯，且訂金不予退還。</li>
+                                    <li>修改訂單或預約取消須於24小時前提出。</li>
+                                    <li>其餘場館規範與退改簽政策，請詳閱《使用者服務協議》。</li>
+
+                                </ol>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ------------------------預約表單----------------------------- -->
+                </div>
+                <div class="card is-hidden" id="booking-steps-combined">
+                    <button type="button" class="btn-back-step" id="btn-back-to-step1">⬅︎ 返回步驟 1. 選擇場館及時段</button>
+                    <div class="row-top">
+                        <h2 class="text-title-medium step-title" id="step-title-2">2. 挑選球檯</h2>
+                    </div>
+                    <div class="sticky-layout-row">
+                        <div class="col-left">
+                            <div id="sub-panel-step2-table">
+                                <div class="switch-mode">
+                                    <button type="button" class="table-mode auto-mode" id="auto-mode">
+                                        <h3>不挑桌，快速分配</h3>
+                                        <p>系統推薦最佳空桌，快速完成預約</p>
+                                    </button>
+                                    <button type="button" class="table-mode manual-mode is-active" id="manual-mode">
+                                        <h3>自行選擇球檯</h3>
+                                        <p>開啟實體平面圖，選擇喜好球檯</p>
+                                    </button>
+                                </div>
+                                <div class="pick-table-area">
+                                    <div class="auto-mode confirm-area table-info-area hidden" id="auto-mode-panel">
+                                        <p class="text-muted booking-title">系統已為您推薦：</p>
+                                        <div class="table-info">
+                                            <div class="table-pic">
+                                                <img src="./images/brunswick.png" alt="">
+
+                                            </div>
+                                            <div class="table-info-txt">
+                                                <p class="text-body  table-brand">03 號 一般標準檯 (Brunswick)</p>
+                                                <p>袋口尺寸：4.5英吋</p>
+                                                <p>桌布顏色：藍色</p>
+                                                <p class="memo">* 所有球桌均附花式撞球、巧克、架桿器、記分板、排球紙</p>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="manual-mode confirm-area table-info-area" id="manual-mode-panel">
+                                        <p class="text-muted booking-title">請選擇球桌 (綠色為可預約)：</p>
+                                        <div class="floor-plan-wrapper">
+                                            <input type="radio" name="billiard-table" id="table-01" value="01"
+                                                class="table-radio-input" disabled>
+                                            <label for="table-01" class="table-btn table-pos-1">01 <span
+                                                    class="brand">Brunswick</span></label>
+                                            <input type="radio" name="billiard-table" id="table-02" value="02"
+                                                class="table-radio-input" disabled>
+                                            <label for="table-02" class="table-btn table-pos-2">02 <span
+                                                    class="brand">Brunswick</span></label>
+                                            <input type="radio" name="billiard-table" id="table-03" value="03"
+                                                class="table-radio-input">
+                                            <label for="table-03" class="table-btn table-pos-3">03 <span
+                                                    class="brand">Brunswick</span></label>
+                                            <input type="radio" name="billiard-table" id="table-04" value="04"
+                                                class="table-radio-input" disabled>
+                                            <label for="table-04" class="table-btn table-pos-4">04 <span
+                                                    class="brand">RASSON</span></label>
+                                            <input type="radio" name="billiard-table" id="table-05" value="05"
+                                                class="table-radio-input">
+                                            <label for="table-05" class="table-btn table-pos-5">05 <span
+                                                    class="brand">RASSON</span></label>
+                                            <input type="radio" name="billiard-table" id="table-06" value="06"
+                                                class="table-radio-input">
+                                            <label for="table-06" class="table-btn table-pos-6">06 <span
+                                                    class="brand">RASSON</span></label>
+                                            <input type="radio" name="billiard-table" id="table-07" value="07"
+                                                class="table-radio-input">
+                                            <label for="table-07" class="table-btn table-pos-7">07 <span
+                                                    class="brand">RASSON</span></label>
+                                        </div>
+                                        <div class="manual-mode confirm-area table-info-area manual-info">
+                                            <p class="text-muted booking-title">您已選擇：</p>
+                                            <div class="table-info">
+                                                <div class="table-pic">
+                                                    <img src="./images/rasson.png" alt="">
+
+                                                </div>
+                                                <div class="table-info-txt">
+                                                    <p class="text-body  table-brand">03 號 國際賽事檯 (RASSON)</p>
+                                                    <p>袋口尺寸：4英吋</p>
+                                                    <p>桌布顏色：灰色</p>
+                                                    <p class="memo">* 所有球桌均附花式撞球、巧克、架桿器、記分板、排球紙</p>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-right">
+                            <div class="col-right sticky-sidebar-panel">
+                                <div class="confirm-area topic">
+                                    <p class="booking-title text-muted">
+                                        預約摘要</p>
+                                    <div class="choose-result">
+                                        <ul class="choose-result-list">
+                                            <li>場館：<span class="summary-store chosen-result">新竹旗艦館
+
+                                                </span></li>
+                                            <li>日期：<span class="summary-date chosen-result">2026 年 06 月 15 日 (星期一)
+                                                </span> </li>
+                                            <li>時段：<span class="summary-time chosen-result">19:00 – 21:00 (共 2 小時)
+                                                </span></li>
+                                            <li id="global-summary-table">球檯：<span
+                                                    class="summary-table chosen-result">03 號 一般標準檯</span></li>
+                                        </ul>
+
+                                        <div class="summary-total-box">
+                                            <span class="total-label">預估總金額：</span>
+                                            <span class="total-price" id="global-summary-total">NT$ 300</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="next-step cta-btn topic"
+                                    id="global-main-cta">下一步，加購餐飲</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card is-hidden">
+                    <button type="button" class="btn-back-step" id="btn-back-to-step2">⬅︎ 返回步驟 2. 挑選球檯</button>
+                    <div class="row-top">
+                        <h2 class="text-title-medium step-title is-hidden" id="step-title-3">3. 加購餐飲</h2>
+                    </div>
+                    <div class="sticky-layout-row">
+                        <div class="col-left">
+                            <div id="sub-panel-step3-table">
+                                <div class="food-container">
+                                    <div class="drink-add">
+                                        <p class="food-items-title text-muted">飲品</p>
+                                        <div class="food-cards-grid">
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">茉香鮮綠茶</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">40 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">阿薩姆紅茶</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">40 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">醇厚原味奶茶</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">40 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">冰美式咖啡</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">60 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="snack-add">
+                                        <p class="food-items-title text-muted">輕食</p>
+                                        <div class="food-cards-grid">
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">美式脆薯</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">100 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">雞米花</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">80 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">起司帕尼尼</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">120 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="food-card">
+                                                <img src="https://picsum.photos/150/150/?random=10">
+                                                <div class="food-info">
+                                                    <p class="food-name">楓糖鬆餅</p>
+                                                    <div class="food-num">
+                                                        <p class="food-price">130 元</p>
+                                                        <div class="count-box">
+                                                            <button type="button"> - </button>
+                                                            <span class="qty">0</span>
+                                                            <button type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-right">
+                            <div class="col-right sticky-sidebar-panel">
+                                <div class="confirm-area topic">
+                                    <p class="booking-title text-muted">
+                                        預約摘要</p>
+                                    <div class="choose-result">
+                                        <ul class="choose-result-list">
+                                            <li>場館：<span class="summary-store chosen-result">新竹旗艦館
+
+                                                </span></li>
+                                            <li>日期：<span class="summary-date chosen-result">2026 年 06 月 15 日 (星期一)
+                                                </span> </li>
+                                            <li>時段：<span class="summary-time chosen-result">19:00 – 21:00 (共 2 小時)
+                                                </span></li>
+                                            <li id="global-summary-table">球檯：<span
+                                                    class="summary-table chosen-result">03 號 一般標準檯</span></li>
+                                        </ul>
+
+                                        <div id="summary-food-block" class="food-addon is-hidden">
+                                            <p>餐飲加購：</p>
+                                            <ul id="global-food-list">
+                                            </ul>
+                                        </div>
+
+                                        <div class="summary-total-box">
+                                            <span class="total-label">預估總金額：</span>
+                                            <span class="total-price" id="global-summary-total">NT$ 300</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="next-step cta-btn topic"
+                                    id="global-main-cta">下一步，確認付款</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card is-hidden">
+                    <button type="button" class="btn-back-step" id="btn-back-to-step3">⬅︎ 返回步驟 3. 加購餐飲</button>
+                    <div class="row-top">
+                        <h2 class="text-title-medium step-title is-hidden" id="step-title-3">4. 確認付款</h2>
+                    </div>
+                    <div class="sticky-layout-row">
+                        <div class="col-left">
+                            <div id="sub-panel-step4-table" >
+                                <div class="login-top">
+                                    <h3>只差最後一步了！</h3>
+                                    <p>登入以繼續完成預約</p>
+                                </div>
+                                <div class="login-box">
+                                    <div class="mem-block">
+                                        <label for="mem-id">手機號碼 / Email</label>
+                                        <input type="text" placeholder="請輸入帳號" id="mem-id">
+                                    </div>
+                                    <div class="mem-block">
+                                        <div class="mem-psw-box">
+                                            <label for="mem-psw">密碼</label>
+                                            <a href="" class="forget-psw">忘記密碼？</a>
+                                        </div>
+                                        
+                                        <input type="password" placeholder="請輸入密碼" id="mem-psw">
+                                    </div>
+                                    <button class="log-in" id="log-in">登入</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-right">
+                            <div class="col-right sticky-sidebar-panel">
+                                <div class="confirm-area topic">
+                                    <p class="booking-title text-muted">
+                                        預約摘要</p>
+                                    <div class="choose-result">
+                                        <ul class="choose-result-list">
+                                            <li>場館：<span class="summary-store chosen-result">新竹旗艦館
+
+                                                </span></li>
+                                            <li>日期：<span class="summary-date chosen-result">2026 年 06 月 15 日 (星期一)
+                                                </span> </li>
+                                            <li>時段：<span class="summary-time chosen-result">19:00 – 21:00 (共 2 小時)
+                                                </span></li>
+                                            <li id="global-summary-table">球檯：<span
+                                                    class="summary-table chosen-result">03 號 一般標準檯</span></li>
+                                        </ul>
+
+                                        <div id="summary-food-block" class="food-addon is-hidden">
+                                            <p>餐飲加購：</p>
+                                            <ul id="global-food-list">
+                                            </ul>
+                                        </div>
+
+                                        <div class="summary-total-box">
+                                            <span class="total-label">預估總金額：</span>
+                                            <span class="total-price" id="global-summary-total">NT$ 300</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="next-step topic forbidden"
+                                    id="global-main-cta">請先完成登入</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="left">
+                <p class="logo">Cue Control</p>
+            </div>
+            <div class="center">
+                <a href="" class="mid-btn footer-btn">隱私權政策</a>
+                <a href="" class="mid-btn footer-btn">使用者服務協議</a>
+                <a href="" class="mid-btn footer-btn">常見問題</a>
+                <a href="" class="mid-btn footer-btn">聯絡我們</a>
+            </div>
+            <div class="right">
+                <p class="copyright">&copy; 2026 Cue Control Billiards. All Rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        window.addEventListener('load', function () {
+            // step 1 - 價目表風琴列
+            let accordion = document.getElementById('accordion');
+            let notice = document.getElementById('notice');
+            accordion.onclick = function () { notice.classList.toggle('hidden'); }
+
+            // step 2 - 切換AB模式
+            let autoMode = document.getElementById('auto-mode');
+            let manualMode = document.getElementById('manual-mode');
+
+            let autoModePanel = document.getElementById('auto-mode-panel');
+            let manualModePanel = document.getElementById('manual-mode-panel')
+            autoMode.addEventListener('click', function () {
+                autoModePanel.classList.remove('hidden');
+                autoMode.classList.add('is-active');
+                manualModePanel.classList.add('hidden');
+                manualMode.classList.remove('is-active');
+
+            })
+            manualMode.addEventListener('click', function () {
+                autoModePanel.classList.add('hidden');
+                autoMode.classList.remove('is-active');
+                manualModePanel.classList.remove('hidden');
+                manualMode.classList.add('is-active');
+            })
+        })
+
+
+    </script>
+</body>
+
+</html>

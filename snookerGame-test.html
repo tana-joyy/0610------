@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cue Control — 幾何學大師考驗 (Light Version)</title>
+    <style>
+        body {
+            background-color: #FBF9F6;
+            /* 燕麥暖白基底 */
+            color: #2A3630;
+            /* 煙燻深綠主要文字 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        #game-layout {
+            display: flex;
+            flex-direction: column;
+            width: 824px;
+        }
+
+        #dashboard {
+            background-color: #F4EFEA;
+            /* 淺橡木色偏乳白 */
+            border: 2px solid #E3DBD3;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-left {
+            text-align: left;
+            max-width: 480px;
+        }
+
+        .panel-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        h1 {
+            color: #2A3630;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        #level-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #5A6960;
+        }
+
+        #rule-text {
+            font-size: 13px;
+            color: #B57C1E;
+            /* 質感琥珀金 */
+            margin: 4px 0 0 0;
+            font-weight: 500;
+        }
+
+        #nav-container {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-btn {
+            background-color: #FFFFFF;
+            color: #2A3630;
+            border: 1px solid #C5BCB4;
+            padding: 6px 14px;
+            font-size: 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background-color: #8A9A86;
+            /* 侘寂苔綠 */
+            color: #FFFFFF;
+            border-color: #8A9A86;
+        }
+
+        #restartBtn {
+            background-color: #F1ECE6;
+            border-color: #D5C9BE;
+            color: #8B6E53;
+        }
+
+        #restartBtn:hover {
+            background-color: #8B6E53;
+            color: #FFFFFF;
+            border-color: #8B6E53;
+        }
+
+        #msg-box {
+            background-color: #FFFFFF;
+            border-left: 4px solid #8A9A86;
+            border-top: 1px solid #EBE6E0;
+            border-right: 1px solid #EBE6E0;
+            border-bottom: 1px solid #EBE6E0;
+            color: #2A3630;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            min-width: 280px;
+            text-align: center;
+            border-radius: 0 4px 4px 0;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        canvas {
+            background-color: #3B5947;
+            /* 高級莫斯綠呢布 */
+            border: 12px solid #8B6E53;
+            /* 淺橡木色原木邊框 */
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 12px 28px rgba(139, 110, 83, 0.15);
+            cursor: crosshair;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-layout">
+        <div id="dashboard">
+            <div class="panel-left">
+                <h1>🎯 Cue Control 幾何挑戰</h1>
+                <div id="level-title">載入中...</div>
+                <div id="rule-text">載入中...</div>
+            </div>
+            <div class="panel-right">
+                <div id="nav-container">
+                    <button class="nav-btn" id="prevBtn">⬅️ 上一關</button>
+                    <button class="nav-btn" id="restartBtn">🔄 重新開始</button>
+                    <button class="nav-btn" id="nextBtn">下一關 ➡️</button>
+                </div>
+                <div id="msg-box">系統準備就緒</div>
+            </div>
+        </div>
+
+        <canvas id="poolCanvas" width="800" height="400"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('poolCanvas');
+        const ctx = canvas.getContext('2d');
+        const msgBox = document.getElementById('msg-box');
+        const levelTitle = document.getElementById('level-title');
+        const ruleText = document.getElementById('rule-text');
+        const prevBtn = document.getElementById('prevBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let currentLevel = 1;
+        let isDragging = false;
+        let isTransitioning = false;
+        let firstCollisionWith = null;
+        let bounceCount = 0;
+
+        // 【新功能狀態鎖】
+        let isShotActive = false;          // 記錄白球是否處於發射移動狀態
+        let hasTouchedBallThisTurn = false; // 記錄白球此桿是否有撞到任何目標球
+        let hitWallBeforeBall = false;     // 記錄白球是否「在撞到球之前就先碰到牆壁」
+
+        const friction = 0.985;
+        const maxPowerDist = 110;
+
+        const pockets = [
+            { x: 0, y: 0, r: 24 }, { x: 400, y: 0, r: 21 }, { x: 800, y: 0, r: 24 },
+            { x: 0, y: 400, r: 24 }, { x: 400, y: 400, r: 21 }, { x: 800, y: 400, r: 24 }
+        ];
+
+        class Ball {
+            constructor(x, y, r, color, label, id) {
+                this.x = x; this.y = y; this.r = r;
+                this.color = color; this.label = label; this.id = id;
+                this.vx = 0; this.vy = 0;
+                this.isPocketed = false;
+            }
+            draw() {
+                if (this.isPocketed) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+
+                if (this.label) {
+                    ctx.fillStyle = this.color === '#FFFFFF' || this.color === '#FFD166' ? '#2A3630' : '#FFFFFF';
+                    ctx.font = 'bold 12px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.label, this.x, this.y);
+                }
+            }
+            update() {
+                if (this.isPocketed) return;
+                this.vx *= friction;
+                this.vy *= friction;
+                if (Math.abs(this.vx) < 0.05) this.vx = 0;
+                if (Math.abs(this.vy) < 0.05) this.vy = 0;
+                this.x += this.vx;
+                this.y += this.vy;
+
+                let hitWall = false;
+                if (this.x < this.r) { this.x = this.r; this.vx *= -1; hitWall = true; }
+                if (this.x > canvas.width - this.r) { this.x = canvas.width - this.r; this.vx *= -1; hitWall = true; }
+                if (this.y < this.r) { this.y = this.r; this.vy *= -1; hitWall = true; }
+                if (this.y > canvas.height - this.r) { this.y = canvas.height - this.r; this.vy *= -1; hitWall = true; }
+
+                if (this.id === 'cue' && hitWall && (Math.abs(this.vx) > 0.1 || Math.abs(this.vy) > 0.1)) {
+                    bounceCount++;
+                    // 【核心修正】：如果白球撞牆時，還沒碰過任何目標球，標記為「先撞星犯規」
+                    if (!hasTouchedBallThisTurn) {
+                        hitWallBeforeBall = true;
+                    }
+                }
+
+                pockets.forEach(p => {
+                    let dist = Math.hypot(this.x - p.x, this.y - p.y);
+                    if (dist < p.r) {
+                        this.isPocketed = true;
+                        this.vx = 0; this.vy = 0;
+                    }
+                });
+            }
+        }
+
+        let balls = [];
+        let cueBall = null;
+
+        function initLevel(level) {
+            currentLevel = level;
+            isDragging = false;
+            isTransitioning = false;
+            isShotActive = false;
+            hasTouchedBallThisTurn = false;
+            hitWallBeforeBall = false;
+            firstCollisionWith = null;
+            bounceCount = 0;
+            msgBox.style.borderColor = '#8A9A86';
+            msgBox.style.color = '#2A3630';
+            msgBox.innerText = "按住白球向後拉，放開即可擊球";
+
+            prevBtn.style.visibility = (level === 1) ? 'hidden' : 'visible';
+            nextBtn.style.visibility = (level === 3) ? 'hidden' : 'visible';
+
+            if (level === 1) {
+                levelTitle.innerText = "關卡 1：基礎擊球與防止白球進袋";
+                ruleText.innerText = "規則：直接把紅球打進右下洞。白球不能先進洞，且不能先撞牆或打空桿！";
+                cueBall = new Ball(200, 200, 15, '#FFFFFF', '', 'cue');
+                balls = [cueBall, new Ball(500, 300, 15, '#E65F5C', '3', 'red')];
+            } else if (level === 2) {
+                levelTitle.innerText = "關卡 2：進階規則 — 必須依數字順序進球";
+                ruleText.innerText = "規則：第一下必須先撞到 1 號黃球。1 號還在場上時，不能先碰到或先打進 8 號！";
+                cueBall = new Ball(200, 200, 15, '#FFFFFF', '', 'cue');
+                balls = [
+                    cueBall,
+                    new Ball(450, 150, 15, '#FFD166', '1', 'target'),
+                    new Ball(550, 250, 15, '#2D3142', '8', 'obstacle')
+                ];
+            } else if (level === 3) {
+                levelTitle.innerText = "關卡 3：終極考驗 — 幾何學兩顆星反彈擊球";
+                ruleText.innerText = "規則：利用牆壁反彈「2次以上」繞過紅球打進藍色 9 號球！（此關豁免先碰球限制）";
+
+                cueBall = new Ball(150, 200, 15, '#FFFFFF', '', 'cue');
+                balls = [
+                    cueBall,
+                    new Ball(400, 200, 45, '#E65F5C', '⚠️ 障礙', 'obstacle'),
+                    new Ball(700, 200, 15, '#247BA0', '9', 'target')
+                ];
+            }
+        }
+
+        function handleCollision(b1, b2) {
+            if (b1.isPocketed || b2.isPocketed) return;
+            let dx = b2.x - b1.x;
+            let dy = b2.y - b1.y;
+            let dist = Math.hypot(dx, dy);
+
+            if (dist < b1.r + b2.r) {
+                // 【核心修正】：只要白球參與了碰撞，標記本桿已成功碰球
+                if (b1.id === 'cue' || b2.id === 'cue') {
+                    hasTouchedBallThisTurn = true;
+                }
+
+                if (b1.id === 'cue' && !firstCollisionWith) firstCollisionWith = b2.id;
+                if (b2.id === 'cue' && !firstCollisionWith) firstCollisionWith = b1.id;
+
+                let overlap = (b1.r + b2.r) - dist;
+                let nx = dx / dist; let ny = dy / dist;
+                b1.x -= nx * overlap / 2; b1.y -= ny * overlap / 2;
+                b2.x += nx * overlap / 2; b2.y += ny * overlap / 2;
+
+                let kx = b1.vx - b2.vx; let ky = b1.vy - b2.vy;
+                let p = 2 * (nx * kx + ny * ky) / 2;
+                b1.vx -= p * nx; b1.vy -= p * ny;
+                b2.vx += p * nx; b2.vy += p * ny;
+            }
+        }
+
+        let mouse = { x: 0, y: 0 };
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (cueBall.vx !== 0 || cueBall.vy !== 0 || cueBall.isPocketed || isTransitioning) return;
+            let rect = canvas.getBoundingClientRect();
+            let mx = e.clientX - rect.left;
+            let my = e.clientY - rect.top;
+
+            if (Math.hypot(mx - cueBall.x, my - cueBall.y) < cueBall.r + 15) {
+                isDragging = true;
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            let rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                let dx = cueBall.x - mouse.x;
+                let dy = cueBall.y - mouse.y;
+                let dist = Math.hypot(dx, dy);
+
+                if (dist > maxPowerDist) {
+                    dx = (dx / dist) * maxPowerDist;
+                    dy = (dy / dist) * maxPowerDist;
+                }
+
+                firstCollisionWith = null;
+                bounceCount = 0;
+                hasTouchedBallThisTurn = false;
+                hitWallBeforeBall = false;
+                isShotActive = true; // 標記白球擊出
+
+                cueBall.vx = dx * 0.12;
+                cueBall.vy = dy * 0.12;
+                isDragging = false;
+            }
+        });
+
+        prevBtn.addEventListener('click', () => { if (currentLevel > 1) initLevel(currentLevel - 1); });
+        restartBtn.addEventListener('click', () => { initLevel(currentLevel); });
+        nextBtn.addEventListener('click', () => { if (currentLevel < 3) initLevel(currentLevel + 1); });
+
+        function checkGameRules() {
+            if (isTransitioning) return;
+
+            let allStopped = balls.every(b => b.vx === 0 && b.vy === 0);
+            if (!allStopped) return;
+
+            // 如果球都停下來了，且剛剛有發射擊球，開始驗證這桿的合法性
+            if (isShotActive) {
+                isShotActive = false; // 重置發射狀態
+
+                // 💡 關卡 1 & 2 必須嚴格遵循「不能先碰星」與「不能空桿」
+                if (currentLevel === 1 || currentLevel === 2) {
+                    if (hitWallBeforeBall) {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#E65F5C';
+                        msgBox.style.color = '#E65F5C';
+                        msgBox.innerText = "❌ 犯規！出桿後白球不能先撞到顆星（牆壁）！";
+                        setTimeout(() => initLevel(currentLevel), 2500);
+                        return;
+                    }
+                    if (!hasTouchedBallThisTurn) {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#E65F5C';
+                        msgBox.style.color = '#E65F5C';
+                        msgBox.innerText = "❌ 犯規！空桿（什麼球都沒碰到）！";
+                        setTimeout(() => initLevel(currentLevel), 2500);
+                        return;
+                    }
+                }
+            }
+
+            if (cueBall.isPocketed) {
+                isTransitioning = true;
+                msgBox.style.borderColor = '#E65F5C';
+                msgBox.style.color = '#E65F5C';
+                msgBox.innerText = "❌ 犯規！白球掉進洞了！";
+                setTimeout(() => initLevel(currentLevel), 2000);
+                return;
+            }
+
+            if (currentLevel === 1) {
+                if (balls.find(b => b.id === 'red').isPocketed) {
+                    isTransitioning = true;
+                    msgBox.style.borderColor = '#8A9A86';
+                    msgBox.style.color = '#8A9A86';
+                    msgBox.innerText = "🎉 太棒了！2 秒後進入下一關。";
+                    setTimeout(() => initLevel(2), 2000);
+                }
+            } else if (currentLevel === 2) {
+                let oneBall = balls.find(b => b.id === 'target');
+                let obstacleBall = balls.find(b => b.id === 'obstacle');
+
+                if (!oneBall.isPocketed) {
+                    if (firstCollisionWith === 'obstacle') {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#E65F5C';
+                        msgBox.style.color = '#E65F5C';
+                        msgBox.innerText = "❌ 犯規！1 號球還在，不能先碰 8 號！";
+                        setTimeout(() => initLevel(2), 2000);
+                    } else if (obstacleBall.isPocketed) {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#E65F5C';
+                        msgBox.style.color = '#E65F5C';
+                        msgBox.innerText = "❌ 犯規！順序錯誤，不能先打進 8 號！";
+                        setTimeout(() => initLevel(2), 2000);
+                    } else {
+                        msgBox.style.borderColor = '#ffcc00';
+                        msgBox.style.color = '#B57C1E';
+                        msgBox.innerText = "⚡️ 1 號球還在場上，請繼續瞄準 1 號！";
+                    }
+                } else {
+                    if (!obstacleBall.isPocketed) {
+                        msgBox.style.borderColor = '#8A9A86';
+                        msgBox.style.color = '#8A9A86';
+                        msgBox.innerText = "🎯 漂亮！1 號已清除，接下來請打進 8 號球！";
+                    } else {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#8A9A86';
+                        msgBox.style.color = '#8A9A86';
+                        msgBox.innerText = "🎉 挑戰成功！2 秒後解鎖極致第三關！";
+                        setTimeout(() => initLevel(3), 2000);
+                    }
+                }
+            } else if (currentLevel === 3) {
+                let nineBall = balls.find(b => b.id === 'target');
+
+                if (firstCollisionWith === 'obstacle') {
+                    isTransitioning = true;
+                    msgBox.style.borderColor = '#E65F5C';
+                    msgBox.style.color = '#E65F5C';
+                    msgBox.innerText = "❌ 碰到了紅色障礙球，犯規重來！";
+                    setTimeout(() => initLevel(3), 2000);
+                } else if (nineBall.isPocketed) {
+                    if (bounceCount >= 2) {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#8A9A86';
+                        msgBox.style.color = '#8A9A86';
+                        msgBox.innerText = `🏆 神乎其技！反彈 ${bounceCount} 次擊落！幾何學大師！`;
+                    } else {
+                        isTransitioning = true;
+                        msgBox.style.borderColor = '#B57C1E';
+                        msgBox.style.color = '#B57C1E';
+                        msgBox.innerText = `⚠️ 球進了，但只反彈了 ${bounceCount} 次！未達 2 次標準。`;
+                        setTimeout(() => initLevel(3), 2500);
+                    }
+                }
+            }
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            pockets.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = '#222B26';
+                ctx.fill();
+                ctx.closePath();
+            });
+
+            balls.forEach(b => b.update());
+
+            for (let i = 0; i < balls.length; i++) {
+                for (let j = i + 1; j < balls.length; j++) {
+                    handleCollision(balls[i], balls[j]);
+                }
+            }
+
+            balls.forEach(b => b.draw());
+
+            if (isDragging) {
+                ctx.beginPath();
+                ctx.moveTo(cueBall.x, cueBall.y);
+
+                let dx = cueBall.x - mouse.x;
+                let dy = cueBall.y - mouse.y;
+                let dist = Math.hypot(dx, dy);
+
+                if (dist > maxPowerDist) {
+                    dx = (dx / dist) * maxPowerDist;
+                    dy = (dy / dist) * maxPowerDist;
+                }
+
+                let targetX = cueBall.x + dx;
+                let targetY = cueBall.y + dy;
+
+                ctx.lineTo(targetX, targetY);
+                ctx.strokeStyle = 'rgba(42, 54, 48, 0.4)';
+                ctx.lineWidth = 2.5;
+                ctx.setLineDash([6, 4]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.closePath();
+            }
+
+            checkGameRules();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initLevel(1);
+        gameLoop();
+    </script>
+
+</body>
+
+</html>

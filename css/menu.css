@@ -1,0 +1,108 @@
+.row {
+    display: flex;
+    gap: 2rem;
+    padding-inline:20px;
+}
+.col-left, .col-right {
+    flex: 1;
+}
+.card {
+    border: 1px solid var(--border-standard);
+    padding: 3rem 2.4rem;
+    background-color: var(--bg-container);
+    border-radius: 10px;
+}
+.table-cost {
+    font-size: 1.2rem;
+}
+.price-number {
+    color: var(--action-primary);
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+/* ------球檯價目表------- */
+.col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* justify-content: space-between; */
+}
+.notice-block {
+    padding-block: 2rem;
+    border-top: 1px solid var(--border-standard);
+}
+.notice-block ul, .service-title p,
+.notice-block li {
+    color: var(--text-muted);
+}
+.service-title {
+    line-height: 1.4;
+    padding-bottom: 1.2rem;
+}
+.notice ul {
+    padding-left: 20px;
+}
+
+.notice li {
+    list-style: disc;
+    font-size: 1.4rem;
+    line-height: 1.2;
+}
+.notice li:not(:last-child) {
+    margin-bottom: 8px;
+
+}
+
+
+
+.table {
+    line-height: 1.4;
+}
+.table-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block: 2rem;
+}
+.table-brand {
+    color: var(--text-muted);
+}
+/* ------menu------- */
+.col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.menu-title {
+    color: var(--ui-active);
+    border-bottom: 1px solid var(--border-standard);
+    padding-bottom: 5px;
+    margin-block: 1.2rem;
+}
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.item {
+    display: flex;
+    padding-block: .4rem;
+    width: 100%;
+}
+.food {
+    display: flex;
+    align-items: baseline;
+    flex-grow: 1;
+}
+.food::after {
+    content: "";
+    flex-grow: 1;
+    border-bottom: 1px dashed var(--border-inactive);
+    margin: 0 12px;
+}
+
+.food-price {
+    flex-shrink: 0;
+    font-weight: 700;
+}

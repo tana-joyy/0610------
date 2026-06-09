@@ -1,0 +1,54 @@
+/* ==================== 撞球遊戲嵌入樣式 ==================== */
+.game-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-block: 10px;
+}
+
+.game-iframe {
+    width: 825px;
+    height: 533px;
+    border: none;
+    border-radius: 12px;
+    background-color: transparent;
+    margin-bottom: 6rem;
+    /* box-shadow: 3px 3px  rgba(0, 0, 0, 0.3); */
+}
+
+/* --------規則--------- */
+.title-section {
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--border-standard);
+    margin-inline: 2rem;
+}
+
+.rule-list {
+    counter-reset: rule-counter;
+    margin: 2rem 2rem 0 2rem;
+}
+.rule-title {
+    color: var(--ui-active);
+    font-weight: 600;
+}
+.rule-item {
+    display: flex;
+    gap: 2rem;
+
+    padding: 1rem 2rem;
+    margin-bottom: 28px;
+    background-color: var(--bg-global);
+    border-radius: 10px;
+}
+.rule-item:hover {
+    background-color: var(--bg-bluecontainer);
+}
+.rule-num {
+    padding-inline: 1rem;
+    text-align: center;
+    margin: auto;
+    color: var(--action-primary);
+    font-size: 2.8rem;
+    font-weight: 600;
+}
+
